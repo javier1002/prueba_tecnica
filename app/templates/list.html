@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Items</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script type="text/javascript">
+        function confirmarEliminacion(itemId) {
+            // Muestra una advertencia antes de eliminar
+            var confirmacion = confirm("¿Estás seguro de que quieres eliminar este item?");
+            if (confirmacion) {
+                // Si el usuario confirma, envía el formulario
+                document.getElementById("form-eliminar-" + itemId).submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Lista de Items</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Descripción</th>
+                    <th>Sexo</th>
+                    <th>Tipo</th>
+                    <th>Activo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if items %}
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.nombre }}</td>
+                            <td>{{ item.email if item.email else 'No proporcionado' }}</td>
+                            <td>{{ item.descripcion }}</td>
+                            <td>{{ item.categoria }}</td>
+                            <td>{{ item.tipo }}</td>
+                            <td>{{ item.activo }}</td>
+                            <td>
+                                <a href="/items/{{ item.id }}/edit">Editar</a>
+                                <!-- Agregar un formulario de eliminación con un botón -->
+                                <form id="form-eliminar-{{ item.id }}" action="/items/{{ item.id }}/delete" method="post" style="display:inline;">
+                                    <button type="button" onclick="confirmarEliminacion('{{ item.id }}')">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7">No hay items disponibles.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <a href="/create">Crear Nuevo Item</a>
+    </div>
+</body>
+</html>

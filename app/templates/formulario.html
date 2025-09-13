@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Item</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script type="text/javascript">
+        function validarFormulario() {
+            // Obtener el valor del campo 'descripcion'
+            var descripcion = document.forms["crearItemForm"]["descripcion"].value;
+
+            // Verificar si el campo descripcion está vacío
+            if (descripcion.trim() === "") {
+                alert("El campo descripción no puede estar vacío.");
+                return false;  // Evita que el formulario se envíe
+            }
+
+            return true;  // Permite que el formulario se envíe
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Crear Nuevo Item</h2>
+        <form name="crearItemForm" action="/items/" method="post" onsubmit="return validarFormulario()">
+            <label for="nombre">Nombre completo:</label>
+            <input type="text" name="nombre" required>
+
+            <label for="descripcion">Descripción:</label>
+            <input type="text" name="descripcion" required>
+
+            <label for="categoria">Sexo:</label>
+            <select name="categoria" required>
+                <option value="cat1">Masculino</option>
+                <option value="cat2">Femenino</option>
+            </select>
+
+            <label for="tipo">Tipo:</label>
+            <input type="radio" name="tipo" value="Administracion" required> Administración
+            <input type="radio" name="tipo" value="contable"> Contable
+            <input type="radio" name="tipo" value="archivo"> Archivo
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required placeholder="email@domain.com">
+
+            <label for="activo">Activo:</label>
+            <input type="checkbox" name="activo" value="true"> Activo
+
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+</body>
+</html>

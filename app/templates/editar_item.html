@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Item</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script type="text/javascript">
+        function validarFormulario() {
+            // Obtener los valores de los campos
+            var descripcion = document.forms["editarItemForm"]["descripcion"].value;
+            var email = document.forms["editarItemForm"]["email"].value;
+
+            // Verificar si el campo descripción está vacío
+            if (descripcion.trim() === "") {
+                alert("El campo descripción no puede estar vacío.");
+                return false;  // Evita que el formulario se envíe
+            }
+
+            // Validar el correo electrónico (si está presente)
+            if (email.trim() === "") {
+                alert("El campo email no puede estar vacío.");
+                return false;  // Evita que el formulario se envíe
+            }
+
+            // Validar formato de email
+            var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(email)) {
+                alert("Por favor, ingrese un correo electrónico válido.");
+                return false;  // Evita que el formulario se envíe
+            }
+
+            return true;  // Permite que el formulario se envíe
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Editar Item</h2>
+        <form name="editarItemForm" action="/items/{{ item.id }}/edit" method="post" onsubmit="return validarFormulario()">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" value="{{ item.nombre }}" required>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea name="descripcion" required>{{ item.descripcion }}</textarea>
+
+            <label for="categoria">sexo:</label>
+            <select name="categoria" required>
+                <option value="cat1" {% if item.categoria == 'cat1' %} selected {% endif %}>masculino</option>
+                <option value="cat2" {% if item.categoria == 'cat2' %} selected {% endif %}>femenino</option>
+            </select>
+
+            <label for="tipo">Tipo:</label>
+            <input type="radio" name="tipo" value="opcion1" {% if item.tipo == 'opcion1' %} checked {% endif %}> Opción 1
+            <input type="radio" name="tipo" value="opcion2" {% if item.tipo == 'opcion2' %} checked {% endif %}> Opción 2
+            <input type="radio" name="tipo" value="opcion3" {% if item.tipo == 'opcion3' %} checked {% endif %}> Opción 3
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" value="{{ item.email }}" required> 
+
+
+            <label for="activo">Activo:</label>
+            <input type="checkbox" name="activo" value="true" {% if item.activo %} checked {% endif %}> Activo
+
+
+
+            <button type="submit">Actualizar</button>
+        </form>
+    </div>
+</body>
+</html>
