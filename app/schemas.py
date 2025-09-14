@@ -1,11 +1,13 @@
 from pydantic import BaseModel, EmailStr
+from typing import List, Optional
 
 class Item(BaseModel):
-    nombre: str  # Campo obligatorio
+    nombre: str  
     email: EmailStr | None = None  
     descripcion: str | None = None
-    categoria: str | None = None
-    tipo: str | None = None
+    sexo: str | None = None
+    area: str | None = None
+    roles: List[str]
     activo: bool = True
     
 
@@ -15,15 +17,16 @@ class ItemCreate(Item):
 
 
 class ItemInDB(Item):
-    id: int  # Esto agrega el campo id que será autoincrementado en la DB
+    id: int  # autoincrementaen la DB
 
 #
 class ItemUpdate(BaseModel):  
     nombre: str | None = None
     email: EmailStr | None = None  
     descripcion: str | None = None
-    categoria: str | None = None
-    tipo: str | None = None
+    sexo: str | None = None
+    area: str | None = None
+    roles: List[str]
     activo: bool | None = None
     
 

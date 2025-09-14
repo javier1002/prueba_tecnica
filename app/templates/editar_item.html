@@ -7,63 +7,96 @@
     <link rel="stylesheet" href="/static/styles.css">
     <script type="text/javascript">
         function validarFormulario() {
-            // Obtener los valores de los campos
+            
+            
+            var nombre = document.forms["editarItemForm"]["nombre"].value;
             var descripcion = document.forms["editarItemForm"]["descripcion"].value;
             var email = document.forms["editarItemForm"]["email"].value;
 
-            // Verificar si el campo descripción está vacío
-            if (descripcion.trim() === "") {
-                alert("El campo descripción no puede estar vacío.");
-                return false;  // Evita que el formulario se envíe
+            // Verificar si el campo 'nombre' está vacío
+            if (nombre.trim() === "") {
+                alert("El campo nombre no puede estar vacío.");
+                return false;  
             }
 
-            // Validar el correo electrónico (si está presente)
+            // Validar que el nombre solo contenga letras y espacios
+            var regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+            if (!regexNombre.test(nombre.trim())) {
+                alert("El nombre solo puede contener letras y espacios.");
+                return false;  
+            }
+
+            // Verificar si el campo 'descripcion' está vacío
+            if (descripcion.trim() === "") {
+                alert("El campo descripción no puede estar vacío.");
+                return false;  
+            }
+
+            // Validar el correo electrónico
             if (email.trim() === "") {
                 alert("El campo email no puede estar vacío.");
-                return false;  // Evita que el formulario se envíe
+                return false;  
             }
 
             // Validar formato de email
             var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!regex.test(email)) {
                 alert("Por favor, ingrese un correo electrónico válido.");
-                return false;  // Evita que el formulario se envíe
+                return false; 
             }
 
-            return true;  // Permite que el formulario se envíe
+            return true;  
         }
     </script>
 </head>
 <body>
     <div class="form-container">
-        <h2>Editar Item</h2>
+        <h2>Editar Empleado</h2>
         <form name="editarItemForm" action="/items/{{ item.id }}/edit" method="post" onsubmit="return validarFormulario()">
+            
+           
+            <input type="hidden" name="tipo" value="{{ item.tipo if item.tipo else 'empleado' }}">
+            
+            <!-- Campo para el nombre -->
             <label for="nombre">Nombre:</label>
             <input type="text" name="nombre" value="{{ item.nombre }}" required>
 
+            <!-- Campo para la descripción -->
             <label for="descripcion">Descripción:</label>
             <textarea name="descripcion" required>{{ item.descripcion }}</textarea>
 
-            <label for="categoria">sexo:</label>
-            <select name="categoria" required>
-                <option value="cat1" {% if item.categoria == 'cat1' %} selected {% endif %}>masculino</option>
-                <option value="cat2" {% if item.categoria == 'cat2' %} selected {% endif %}>femenino</option>
+            <!-- Campo para el correo -->
+            <label for="email">Email:</label>
+            <input type="email" name="email" value="{{ item.email }}" required>
+
+            <!-- Campo para el sexo -->
+            <div>
+                <label for="sexo">Sexo:</label>
+                <input type="radio" name="sexo" value="Masculino" {% if item.sexo == 'Masculino' %} checked {% endif %}> Masculino
+                <input type="radio" name="sexo" value="Femenino" {% if item.sexo == 'Femenino' %} checked {% endif %}> Femenino
+            </div>
+
+            <!-- Campo para el área -->
+            <label for="area">Área:</label>
+            <select name="area" required>
+                <option value="Administración" {% if item.area == 'Administración' %} selected {% endif %}>Administración</option>
+                <option value="Contable" {% if item.area == 'Contable' %} selected {% endif %}>Contable</option>
+                <option value="Archivo" {% if item.area == 'Archivo' %} selected {% endif %}>Archivo</option>
             </select>
 
-            <label for="tipo">Tipo:</label>
-            <input type="radio" name="tipo" value="opcion1" {% if item.tipo == 'opcion1' %} checked {% endif %}> Opción 1
-            <input type="radio" name="tipo" value="opcion2" {% if item.tipo == 'opcion2' %} checked {% endif %}> Opción 2
-            <input type="radio" name="tipo" value="opcion3" {% if item.tipo == 'opcion3' %} checked {% endif %}> Opción 3
-
-            <label for="email">Email:</label>
-            <input type="email" name="email" value="{{ item.email }}" required> 
-
-
+            <!-- Campo para el estado activo -->
             <label for="activo">Activo:</label>
             <input type="checkbox" name="activo" value="true" {% if item.activo %} checked {% endif %}> Activo
 
+            <!-- Campo para roles -->
+            <div>
+                <label for="roles">Roles:</label>
+                <input type="checkbox" name="roles" value="profesional de proyectos - desarrollador" {% if 'profesional de proyectos - desarrollador' in item.roles %} checked {% endif %}> profesional de proyectos - desarrollador
+                <input type="checkbox" name="roles" value="gerente estrategico" {% if 'gerente estrategico' in item.roles %} checked {% endif %}> gerente estratégico
+                <input type="checkbox" name="roles" value="Auxiliar administrativo" {% if 'Auxiliar administrativo' in item.roles %} checked {% endif %}> Auxiliar administrativo
+            </div>
 
-
+            <!-- Botón de envío -->
             <button type="submit">Actualizar</button>
         </form>
     </div>

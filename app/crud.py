@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from app import models, schemas
+import json
 
 # Lógica para obtener todos los items
 def get_items(db: Session):
@@ -11,36 +12,44 @@ def get_items_by_id(db: Session, item_id: int):
 
 # Lógica para crear un nuevo item
 def crear_item(db: Session, item: schemas.ItemCreate):
+    roles_str = json.dumps(item.roles) if isinstance(item.roles, list) else item.roles
     db_item = models.Item(
         nombre=item.nombre,
         email=item.email,
         descripcion=item.descripcion,
-        categoria=item.categoria,
-        tipo=item.tipo,
+        sexo=item.sexo,
+        area=item.area,
+        roles=roles_str,
         activo=item.activo,
-        
     )
     db.add(db_item)
-    db.commit()  # Realiza la acción en la base de datos
-    db.refresh(db_item)  # Refresca el objeto para obtener la versión actualizada de la base de datos
+    db.commit()
+    db.refresh(db_item)
     return db_item
 
 # Lógica para actualizar un item
 def update_item(db: Session, item_id: int, item: schemas.ItemUpdate):
     db_item = get_items_by_id(db, item_id)
     if db_item:
-        for key, value in item.dict(exclude_unset=True).items():  # Solo actualiza los valores que fueron modificados
-            setattr(db_item, key, value)
-        db.commit()  # Ejecuta el commit solo una vez
-        db.refresh(db_item)  # Refresca el objeto actualizado
+        item_dict = item.dict(exclude_unset=True)
+        
+        for key, value in item_dict.items():
+            if key == 'roles' and isinstance(value, list):
+                # Convertir la lista de roles a JSON string
+                setattr(db_item, key, json.dumps(value))
+            else:
+                setattr(db_item, key, value)
+        
+        db.commit()
+        db.refresh(db_item)
         return db_item
-    return None  # Si no se encuentra el item, retorna None
+    return None
 
 # Lógica para eliminar un item
 def delete_item(db: Session, item_id: int):
     db_item = get_items_by_id(db, item_id)
     if db_item:
         db.delete(db_item)
-        db.commit()  # Elimina el item de la base de datos
-        return db_item  # Devuelve el item eliminado
-    return None  # Si no se encuentra el item, retorna None
+        db.commit()
+        return db_item
+    return None

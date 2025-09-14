@@ -1,11 +1,12 @@
-CREATE TABLE items(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    Correo TEXT,
-    sexo ENUM('tipo1', 'tipo2'),
-    area VARCHAR(100),
-    descripcion VARCHAR(100),
-    tipo ENUM('tipo1', 'tipo2'),
-   
-    activo BOOLEAN DEFAULT TRUE,
+CREATE TABLE empleados (
+    id INT AUTO_INCREMENT PRIMARY KEY,        
+    nombre VARCHAR(100) NOT NULL,               
+    email VARCHAR(100) NOT NULL UNIQUE,         
+    descripcion TEXT,                          
+    sexo ENUM('Masculino', 'Femenino') NOT NULL, 
+    area ENUM('Administración', 'Contable', 'Archivo') NOT NULL, 
+    roles VARCHAR(255),                         
+    activo BOOLEAN DEFAULT TRUE,                
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
 );

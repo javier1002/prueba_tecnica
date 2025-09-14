@@ -5,45 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Item</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .sexo-container {
+            display: flex; /*  alinear horizontalmente */
+            align-items: center; 
+            gap: 10px; 
+        }
+    </style>
     <script type="text/javascript">
         function validarFormulario() {
-            // Obtener el valor del campo 'descripcion'
+            // Obtener los valores de los campos
+            var nombre = document.forms["crearItemForm"]["nombre"].value;
             var descripcion = document.forms["crearItemForm"]["descripcion"].value;
+            var email = document.forms["crearItemForm"]["email"].value;
 
-            // Verificar si el campo descripcion está vacío
-            if (descripcion.trim() === "") {
-                alert("El campo descripción no puede estar vacío.");
-                return false;  // Evita que el formulario se envíe
+            // Validar que el campo 'nombre' solo contenga letras y espacios
+            var nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;  // Permite solo letras y espacios
+            if (!nombreRegex.test(nombre)) {
+                alert("El campo 'Nombre' solo puede contener letras y espacios.");
+                return false;  
             }
 
-            return true;  // Permite que el formulario se envíe
+            // Verificar si el campo 'descripcion' está vacío
+            if (descripcion.trim() === "") {
+                alert("El campo descripción no puede estar vacío.");
+                return false;  
+            }
+
+            // Validar el correo electrónico (si está presente)
+            if (email.trim() === "") {
+                alert("El campo email no puede estar vacío.");
+                return false;  
+            }
+
+            // Validar formato de email
+            var regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regexEmail.test(email)) {
+                alert("Por favor, ingrese un correo electrónico válido.");
+                return false;  
+            }
+
+            return true;  
         }
     </script>
 </head>
 <body>
     <div class="form-container">
-        <h2>Crear Nuevo Item</h2>
+        <h2>Crear Nuevo Empleado</h2>
         <form name="crearItemForm" action="/items/" method="post" onsubmit="return validarFormulario()">
+            <!-- Campo para el nombre -->
             <label for="nombre">Nombre completo:</label>
             <input type="text" name="nombre" required>
 
+            <!-- campo para email -->
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" name="email" required placeholder="email@domain.com" style="width: 100%; max-width: 400px; padding: 8px; font-size: 16px; box-sizing: border-box;">
+            </div>          
+
+            <!-- campo para descripcion -->
             <label for="descripcion">Descripción:</label>
-            <input type="text" name="descripcion" required>
+            <textarea name="descripcion" required></textarea>
 
-            <label for="categoria">Sexo:</label>
-            <select name="categoria" required>
-                <option value="cat1">Masculino</option>
-                <option value="cat2">Femenino</option>
+            <!-- campo sexo (radio buttons) -->
+            <div class="sexo-container">
+                <label for="sexo">Sexo:</label>
+                <input type="radio" name="sexo" value="Masculino" required> Masculino
+                <input type="radio" name="sexo" value="Femenino" required> Femenino
+            </div>
+
+            <!-- campo area -->
+            <label for="area">Área:</label>            
+            <select name="area" required>
+                <option value="Administración">Administración</option>
+                <option value="Contable">Contable</option>
+                <option value="Archivo">Archivo</option>
             </select>
+            <!-- campo rol -->
+             <div class="roles-container">
+                <label for="roles">Roles:</label>
+                <label>
+                    <input type="checkbox" id="rol_desarrollador" name="roles" value="profesional de proyectos - desarrollador"> profesional de proyectos - desarrollador
+                </label>
+                <label>
+                    <input type="checkbox" id="rol_estrategico" name="roles" value="gerente estrategico"> gerente estrategico
+                </label>
+                <label>
+                    <input type="checkbox"  id="rol_aux_administrativo" name="roles" value="Auxiliar administrativo"> Auxiliar administrativo
+                </label>
+            </div>
 
-            <label for="tipo">Tipo:</label>
-            <input type="radio" name="tipo" value="Administracion" required> Administración
-            <input type="radio" name="tipo" value="contable"> Contable
-            <input type="radio" name="tipo" value="archivo"> Archivo
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required placeholder="email@domain.com">
-
+            <!-- campo activo -->
             <label for="activo">Activo:</label>
             <input type="checkbox" name="activo" value="true"> Activo
 

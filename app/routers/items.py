@@ -29,7 +29,7 @@ def listar_items(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse("items/list.html", {"request": request, "items": items})
 
 @router.post("/items/create", response_class=HTMLResponse)
-def create_item(nombre: str = Form(...), descripcion: str = Form(""), email: str=Form(""), categoria: str = Form(""), tipo: str = Form(...), activo: bool = Form(False), db: Session = Depends(get_db)):
-    item = schemas.ItemCreate(nombre=nombre, descripcion=descripcion, email=email, categoria=categoria, tipo=tipo, activo=activo)
+def create_item(nombre: str = Form(...), descripcion: str = Form(""), email: str=Form(""), sexo: str = Form(""), roles:str = Form(...), area:str = Form(...), activo: bool = Form(False), db: Session = Depends(get_db)):
+    item = schemas.ItemCreate(nombre=nombre, descripcion=descripcion, email=email, sexo=sexo, area=area, activo=activo, roles=roles.split(","))
     crud.create_item(db, item)
     return RedirectResponse("/", status_code=303)               

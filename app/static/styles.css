@@ -57,22 +57,48 @@ h2 {
     text-align: center;
 }
 
+
 table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    table-layout: fixed; 
+    word-wrap: break-word; /* Permite que el contenido largo se envuelva en la celda */
 }
 
 th, td {
     padding: 10px;
-    border: 1px solid #ddd;
     text-align: left;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; /* Asegura que las palabras largas no se desborden */
+    max-width: 200px; 
 }
 
-th {
-    background-color: #f2f2f2;
+td {
+    text-overflow: ellipsis; 
+    white-space: normal; /* Permite que el texto se divida en varias líneas */
+    overflow: hidden; 
 }
 
+
+td:nth-child(2) {
+    width: 100%; 
+}
+
+@media screen and (max-width: 600px) {
+    table, th, td {
+        display: block;
+        width: 100%;
+    }
+
+    td {
+        padding: 10px;
+        box-sizing: border-box;
+        word-wrap: break-word;
+    }
+
+    th {
+        display: none; 
+    }
+}
 a {
     display: inline-block;
     margin-top: 20px;
@@ -86,3 +112,4 @@ a {
 a:hover {
     background-color: #218838;
 }
+
